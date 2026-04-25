@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de ciclos de sueno</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">SLEPPY</p>
+          <h1>Si te duermes ahora, te digo en que ciclo conviene despertar.</h1>
+          <p class="hero-copy">
+            La plataforma toma la hora actual o la que elijas, suma el tiempo que normalmente tardas
+            en dormirte y te aconseja como te podrias sentir si despiertas en cada ciclo.
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span class="stat-label">Ciclo estimado</span>
+            <strong>80-100 min</strong>
+          </div>
+          <div>
+            <span class="stat-label">Objetivo adulto</span>
+            <strong>7-9 h</strong>
+          </div>
+          <div>
+            <span class="stat-label">Latencia comun</span>
+            <strong>10-20 min</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <form class="control-panel" id="sleep-form">
+          <div class="field-group">
+            <label for="bedtime">Hora actual / hora de acostarte</label>
+            <input id="bedtime" name="bedtime" type="time" required />
+          </div>
+
+          <div class="field-group">
+            <label for="latency">Minutos que tardas en dormirte</label>
+            <div class="stepper-row">
+              <input id="latency" name="latency" type="range" min="0" max="45" step="5" value="15" />
+              <output for="latency" id="latency-value">15 min</output>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="target-cycles">Ciclos que quisieras dormir</label>
+            <div class="segmented" id="cycle-buttons" role="radiogroup" aria-label="Ciclos de sueno">
+              <button type="button" class="segment active" data-cycles="4" aria-pressed="true">4</button>
+              <button type="button" class="segment" data-cycles="5" aria-pressed="false">5</button>
+              <button type="button" class="segment" data-cycles="6" aria-pressed="false">6</button>
+            </div>
+          </div>
+
+        </form>
+
+        <section class="results-panel">
+          <div class="summary-card">
+            <p class="section-kicker">Resumen rapido</p>
+            <h2 id="summary-headline">Tu mejor objetivo hoy</h2>
+            <p id="summary-copy"></p>
+            <div class="summary-grid">
+              <article>
+                <span>Te dormirias aprox.</span>
+                <strong id="sleep-start">--:--</strong>
+              </article>
+              <article>
+                <span>Ciclo recomendado</span>
+                <strong id="best-wake">--:--</strong>
+              </article>
+              <article>
+                <span>Descanso total</span>
+                <strong id="best-duration">--</strong>
+              </article>
+            </div>
+          </div>
+
+          <div class="cards-grid">
+            <section class="card">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Consejo por ciclo</p>
+                  <h3>Como te podria pegar cada despertar</h3>
+                </div>
+              </div>
+              <div id="recommended-list" class="schedule-list"></div>
+            </section>
+
+            <section class="card">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Horarios a evitar</p>
+                  <h3>Ventanas entre ciclos</h3>
+                </div>
+              </div>
+              <div id="avoid-list" class="schedule-list"></div>
+            </section>
+          </div>
+
+          <section class="card explainer">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Como leerlo</p>
+                  <h3>No es una promesa exacta, es una guia util</h3>
+                </div>
+              </div>
+              <ul>
+              <li>Las tarjetas comparan despertares tras 1 a 6 ciclos completos.</li>
+              <li>El ciclo 5 suele ser el punto mas equilibrado para muchos adultos porque ronda 7.5 horas.</li>
+              <li>La app usa ventanas de 80 a 100 minutos por ciclo para reflejar variacion real.</li>
+              <li>Si regularmente te despiertas cansado, roncas mucho o te quedas dormido de dia, toca revisarlo con un profesional.</li>
+              </ul>
+            </section>
+
+          <section class="card sources">
+            <div class="card-header">
+              <div>
+                <p class="section-kicker">Base cientifica</p>
+                <h3>Fuentes usadas</h3>
+              </div>
+            </div>
+            <ul>
+              <li>
+                <a href="https://www.nhlbi.nih.gov/health/sleep/stages-of-sleep" target="_blank" rel="noreferrer">NHLBI/NIH</a>:
+                los ciclos de sueno suelen repetirse cada 80 a 100 minutos y ocurren 4 a 6 veces por noche.
+              </li>
+              <li>
+                <a href="https://aasm.org/seven-or-more-hours-of-sleep-per-night-a-health-necessity-for-adults/" target="_blank" rel="noreferrer">AASM y Sleep Research Society</a>:
+                para adultos sanos, dormir 7 o mas horas de manera regular favorece la salud; comunmente se recomienda 7 a 9 horas.
+              </li>
+              <li>
+                <a href="https://www.sleepfoundation.org/how-sleep-works/sleep-latency" target="_blank" rel="noreferrer">Sleep Foundation</a>:
+                una latencia normal para dormir suele rondar 10 a 20 minutos.
+              </li>
+            </ul>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
