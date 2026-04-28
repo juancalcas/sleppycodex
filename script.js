@@ -79,38 +79,38 @@ function getCycleAdvice(cycles) {
     1: {
       tone: "hard",
       label: "Muy mala idea",
-      headline: "Te vas a levantar muy corto de sueno.",
-      body: "Apenas seria una siesta larga. Es muy probable que sigas con sueno, poca claridad mental y nada de energia."
+      headline: "Te vas a levantar muy corto de sueño.",
+      body: "Apenas sería una siesta larga. Es muy probable que sigas con sueño, poca claridad mental y nada de energía."
     },
     2: {
       tone: "hard",
       label: "Fatiga alta",
-      headline: "Si despiertas aqui, lo normal es sentirte cansado.",
-      body: "Son unas 3 horas de descanso. Aunque cierres ciclos, sigue siendo muy poco para rendir bien al dia siguiente."
+      headline: "Si despiertas aquí, lo normal es sentirte cansado.",
+      body: "Son unas 3 horas de descanso. Aunque cierres ciclos, sigue siendo muy poco para rendir bien al día siguiente."
     },
     3: {
       tone: "caution",
       label: "Aguantas",
-      headline: "Podrias funcionar, pero no llegas al minimo ideal.",
-      body: "Al cerrar 3 ciclos suele sentirse mejor que despertar a medias, pero para la mayoria de adultos sigue siendo insuficiente."
+      headline: "Podrías funcionar, pero no llegas al mínimo ideal.",
+      body: "Al cerrar 3 ciclos suele sentirse mejor que despertar a medias, pero para la mayoría de adultos sigue siendo insuficiente."
     },
     4: {
       tone: "caution",
       label: "Aceptable",
-      headline: "Es una salida funcional, aunque todavia corta.",
+      headline: "Es una salida funcional, aunque todavía corta.",
       body: "Ronda 6 horas. Puede sacarte del apuro, pero sigues por debajo del rango recomendado para adultos."
     },
     5: {
       tone: "best",
-      label: "Mas optimo",
-      headline: "Este suele ser el punto mas equilibrado para despertar con mejor energia.",
-      body: "Ronda 7.5 horas, cae dentro del rango recomendado y para mucha gente es la opcion con mejor balance entre descanso y horario."
+      label: "Más óptimo",
+      headline: "Este suele ser el punto más equilibrado para despertar con mejor energía.",
+      body: "Ronda 7.5 horas, cae dentro del rango recomendado y para mucha gente es la opción con mejor balance entre descanso y horario."
     },
     6: {
       tone: "good",
-      label: "Muy buena opcion",
-      headline: "Tambien es una gran hora para despertar si tu agenda lo permite.",
-      body: "Ronda 9 horas. Sueles completar mas descanso total, aunque a algunas personas les resulta menos practico entre semana."
+      label: "Muy buena opción",
+      headline: "También es una gran hora para despertar si tu agenda lo permite.",
+      body: "Ronda 9 horas. Sueles completar más descanso total, aunque a algunas personas les resulta menos práctico entre semana."
     }
   };
 
@@ -118,41 +118,78 @@ function getCycleAdvice(cycles) {
 }
 
 function renderRecommended(items) {
-  recommendedList.innerHTML = items
-    .map((item) => {
-      const advice = getCycleAdvice(item.cycles);
-      const isSelected = item.cycles === selectedCycles;
-      return `
-        <article class="schedule-item advice ${advice.tone} ${isSelected ? "selected" : ""}">
-          <div class="item-title-row">
-            <strong>Ciclo ${item.cycles} - ${formatTime(item.midpoint)}</strong>
-            <span class="pill">${advice.label}</span>
-          </div>
-          <span class="item-meta">${formatDuration(item.duration)} de descanso aproximado</span>
-          <span class="item-headline">${advice.headline}</span>
-          <span class="item-body">${advice.body}</span>
-          <span class="item-range">Ventana realista: ${formatTime(item.start)} - ${formatTime(item.end)}</span>
-        </article>
-      `;
-    })
-    .join("");
+  recommendedList.replaceChildren();
+
+  items.forEach((item) => {
+    const advice = getCycleAdvice(item.cycles);
+    const isSelected = item.cycles === selectedCycles;
+
+    const article = document.createElement("article");
+    article.className = `schedule-item advice ${advice.tone} ${isSelected ? "selected" : ""}`;
+
+    const titleRow = document.createElement("div");
+    titleRow.className = "item-title-row";
+
+    const strongTitle = document.createElement("strong");
+    strongTitle.textContent = `Ciclo ${item.cycles} - ${formatTime(item.midpoint)}`;
+
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.textContent = advice.label;
+
+    titleRow.append(strongTitle, pill);
+
+    const meta = document.createElement("span");
+    meta.className = "item-meta";
+    meta.textContent = `${formatDuration(item.duration)} de descanso aproximado`;
+
+    const headline = document.createElement("span");
+    headline.className = "item-headline";
+    headline.textContent = advice.headline;
+
+    const body = document.createElement("span");
+    body.className = "item-body";
+    body.textContent = advice.body;
+
+    const range = document.createElement("span");
+    range.className = "item-range";
+    range.textContent = `Ventana realista: ${formatTime(item.start)} - ${formatTime(item.end)}`;
+
+    article.append(titleRow, meta, headline, body, range);
+    recommendedList.appendChild(article);
+  });
 }
 
 function renderAvoid(items) {
-  avoidList.innerHTML = items
-    .map(
-      (item) => `
-        <article class="schedule-item avoid">
-          <div class="item-title-row">
-            <strong>${formatTime(item.start)} - ${formatTime(item.end)}</strong>
-            <span class="pill">Evitar</span>
-          </div>
-          <span class="item-meta">Entre ${item.afterCycles} y ${item.afterCycles + 1} ciclos</span>
-          <span class="item-range">Mas probable que despiertes en medio de una transicion de fase.</span>
-        </article>
-      `
-    )
-    .join("");
+  avoidList.replaceChildren();
+
+  items.forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "schedule-item avoid";
+
+    const titleRow = document.createElement("div");
+    titleRow.className = "item-title-row";
+
+    const strongTitle = document.createElement("strong");
+    strongTitle.textContent = `${formatTime(item.start)} - ${formatTime(item.end)}`;
+
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.textContent = "Evitar";
+
+    titleRow.append(strongTitle, pill);
+
+    const meta = document.createElement("span");
+    meta.className = "item-meta";
+    meta.textContent = `Entre ${item.afterCycles} y ${item.afterCycles + 1} ciclos`;
+
+    const range = document.createElement("span");
+    range.className = "item-range";
+    range.textContent = "Más probable que despiertes en medio de una transición de fase.";
+
+    article.append(titleRow, meta, range);
+    avoidList.appendChild(article);
+  });
 }
 
 function syncCycleButtons() {
@@ -176,7 +213,7 @@ function update() {
   bestWakeNode.textContent = `Ciclo ${chosenWindow.cycles} a las ${formatTime(chosenWindow.midpoint)}`;
   bestDurationNode.textContent = formatDuration(chosenWindow.duration);
   summaryHeadline.textContent = `Si te despiertas en el ciclo ${chosenWindow.cycles}, ${chosenAdvice.headline.toLowerCase()}`;
-  summaryCopy.textContent = `Si te acuestas a las ${bedtimeInput.value} y tardas ${latency} minutos en dormirte, empezarias a dormir cerca de las ${formatTime(sleepStart)}. Despertar en el ciclo ${chosenWindow.cycles} te pondria sobre las ${formatTime(chosenWindow.midpoint)}, dentro de una ventana de ${formatTime(chosenWindow.start)} a ${formatTime(chosenWindow.end)}. ${chosenAdvice.body}`;
+  summaryCopy.textContent = `Si te acuestas a las ${bedtimeInput.value} y tardas ${latency} minutos en dormirte, empezarías a dormir cerca de las ${formatTime(sleepStart)}. Despertar en el ciclo ${chosenWindow.cycles} te pondría sobre las ${formatTime(chosenWindow.midpoint)}, dentro de una ventana de ${formatTime(chosenWindow.start)} a ${formatTime(chosenWindow.end)}. ${chosenAdvice.body}`;
 
   renderRecommended(recommended);
   renderAvoid(avoid);
